@@ -5,6 +5,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { myPlayer } from "playroomkit";
 
 import { useDiscordSdk } from "@/hooks/useDiscordSdk";
 
@@ -37,6 +38,7 @@ export type DiscordParticipantPayload = {
 };
 
 export type ParticipantsContext = {
+  me: DiscordParticipant;
   participants: DiscordParticipant[];
   updateParticipant(participant: DiscordParticipant): void;
 };
@@ -51,6 +53,13 @@ export const ParticipantsProvider: React.FC<React.PropsWithChildren> = ({
   const discordSdk = useDiscordSdk();
 
   const [participants, setParticipants] = useState<DiscordParticipant[]>([]);
+
+  // playerId from playroomkit is in the form of `DCD-${id}`
+  const me = useMemo<DiscordParticipant | undefined>(() => {
+    const myId = myPlayer().id.split("-")[1];
+    const me = participants.find((participant) => participant.id == myId);
+    return me;
+  }, [participants]);
 
   useEffect(() => {
     discordSdk.commands
@@ -129,6 +138,7 @@ export const ParticipantsProvider: React.FC<React.PropsWithChildren> = ({
 
   const context: ParticipantsContext = useMemo(() => {
     return {
+      me: me!, // if (!me), it does not render children
       participants,
       updateParticipant,
     };
@@ -136,7 +146,7 @@ export const ParticipantsProvider: React.FC<React.PropsWithChildren> = ({
 
   return (
     <ParticipantsContext.Provider value={context}>
-      {children}
+      {me ? children : null}
     </ParticipantsContext.Provider>
   );
 };
