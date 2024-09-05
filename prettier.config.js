@@ -9,6 +9,7 @@ export default {
     "<THIRD_PARTY_MODULES>",
     "",
     "^types$",
+    "^@/constants/(.*)$",
     "^@/lib/(.*)$",
     "^@/hooks/(.*)$",
     "^@/components/ui/(.*)$",
