@@ -21,7 +21,9 @@ export const PlayersContext = createContext<PlayersContext | null>(null);
 export const PlayersProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const { numPlayers } = useGameSetting();
+  const {
+    gameSetting: { numPlayers },
+  } = useGameSetting();
   const { me, participants } = useParticipants();
 
   const [playerIds, setPlayerIds] = useMultiplayerState<string[]>(

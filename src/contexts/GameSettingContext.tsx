@@ -1,28 +1,24 @@
 import React, { createContext } from "react";
+
 import { OptionalCharacterType } from "@/constants/characters";
 import {
   DEFAULT_NUM_EXPEDITIONS,
   DEFAULT_NUM_PLAYERS,
   NumExpeditions,
-  NumPlayers,
 } from "@/constants/settings";
-
 import { useMultiplayerState } from "@/hooks/useMultiplayerState";
 
 export type GameSetting = {
-  numPlayers: NumPlayers;
+  numPlayers: number;
   numExpeditions: NumExpeditions;
-  optionalCharacters: OptionalCharacterType[];
+  selectedOptionalCitizens: OptionalCharacterType[];
+  selectedOptionalDevils: OptionalCharacterType[];
   anonymousVote: boolean;
 };
 
-type GameSettingContext = GameSetting & {
-  setNumPlayers: React.Dispatch<React.SetStateAction<NumPlayers>>;
-  setNumExpeditions: React.Dispatch<React.SetStateAction<NumExpeditions>>;
-  setOptionalCharacters: React.Dispatch<
-    React.SetStateAction<OptionalCharacterType[]>
-  >;
-  setAnonymousVote: React.Dispatch<React.SetStateAction<boolean>>;
+type GameSettingContext = {
+  gameSetting: GameSetting;
+  setGameSetting: (setting: GameSetting) => void;
 };
 
 export const GameSettingContext = createContext<GameSettingContext | null>(
@@ -32,37 +28,22 @@ export const GameSettingContext = createContext<GameSettingContext | null>(
 export const GameSettingProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const [numPlayers, setNumPlayers] = useMultiplayerState<NumPlayers>(
-    "num-players",
-    DEFAULT_NUM_PLAYERS
-  );
-
-  const [numExpeditions, setNumExpeditions] =
-    useMultiplayerState<NumExpeditions>(
-      "num-expeditions",
-      DEFAULT_NUM_EXPEDITIONS
-    );
-
-  const [optionalCharacters, setOptionalCharacters] = useMultiplayerState<
-    OptionalCharacterType[]
-  >("optional-characters", []);
-
-  const [anonymousVote, setAnonymousVote] = useMultiplayerState<boolean>(
-    "anonymous-vote",
-    false
+  const [gameSetting, setGameSetting] = useMultiplayerState<GameSetting>(
+    "game-setting",
+    {
+      numPlayers: DEFAULT_NUM_PLAYERS,
+      numExpeditions: DEFAULT_NUM_EXPEDITIONS,
+      selectedOptionalCitizens: [],
+      selectedOptionalDevils: [],
+      anonymousVote: false,
+    }
   );
 
   return (
     <GameSettingContext.Provider
       value={{
-        numPlayers,
-        optionalCharacters,
-        numExpeditions,
-        anonymousVote,
-        setNumPlayers,
-        setOptionalCharacters,
-        setNumExpeditions,
-        setAnonymousVote,
+        gameSetting,
+        setGameSetting,
       }}
     >
       {children}
