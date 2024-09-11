@@ -8,8 +8,8 @@ import "./index.css";
 
 insertCoin({
   gameId: import.meta.env.VITE_PLAYROOMKIT_GAME_ID,
-  skipLobby: true,
-  discord: true,
+  // skipLobby: true,
+  // discord: true,
 }).then(() => {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
