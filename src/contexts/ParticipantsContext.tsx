@@ -38,7 +38,7 @@ export type DiscordParticipantPayload = {
 };
 
 export type ParticipantsContext = {
-  me: DiscordParticipant;
+  me: DiscordParticipant | undefined;
   participants: DiscordParticipant[];
   updateParticipant(participant: DiscordParticipant): void;
 };
@@ -138,7 +138,7 @@ export const ParticipantsProvider: React.FC<React.PropsWithChildren> = ({
 
   const context: ParticipantsContext = useMemo(() => {
     return {
-      me: me!, // if (!me), it does not render children
+      me,
       participants,
       updateParticipant,
     };
@@ -146,7 +146,7 @@ export const ParticipantsProvider: React.FC<React.PropsWithChildren> = ({
 
   return (
     <ParticipantsContext.Provider value={context}>
-      {me ? children : null}
+      {children}
     </ParticipantsContext.Provider>
   );
 };

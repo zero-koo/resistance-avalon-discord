@@ -1,6 +1,5 @@
-import { useGameState } from "@/contexts/GameStateContext";
-
 import { characterMap } from "@/constants/characters";
+import { useGameState } from "@/contexts/GameStateContext";
 
 type PlayerAvaterProps = {
   id: string;

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useRef } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 import {
   CharacterSide,
@@ -168,6 +168,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
   };
 
   const handleVoteForExpeditionComposition = (isAgree: boolean) => {
+    if (!me) return;
     const updatedPlayerState = {
       ...playerState,
       [me.id]: {
@@ -210,6 +211,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
   };
 
   const handleVoteOnExpedition = (isAgree: boolean | null) => {
+    if (!me) return;
     const updatedPlayerState = {
       ...playerState,
       [me.id]: {
@@ -290,7 +292,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
         phase,
         round,
         playerState,
-        myPlayerState: playerState[me.id],
+        myPlayerState: playerState[me?.id ?? ""], // TODO!
         commanderIndex,
         countCompositionTrial,
         selectedExpeditionIds,

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+
 import { ParticipantsContext } from "@/contexts/ParticipantsContext";
 
 export const useParticipants = () => {

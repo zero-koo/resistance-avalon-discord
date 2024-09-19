@@ -11,6 +11,7 @@ export default {
     "^types$",
     "^@/constants/(.*)$",
     "^@/lib/(.*)$",
+    "^@/contexts/(.*)$",
     "^@/hooks/(.*)$",
     "^@/components/ui/(.*)$",
     "^@/components/(.*)$",
