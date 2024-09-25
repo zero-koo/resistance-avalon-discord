@@ -1,4 +1,4 @@
-export type NumExpeditions = [number, number, number, number, number];
+export type NumExpeditions = number[];
 
 export const numDevilsPerPlayers: Record<number, number> = {
   5: 2,
@@ -24,6 +24,8 @@ export const possibleNumExpeditions: Record<number, NumExpeditions[]> = {
   10: [[3, 4, 4, 5, 5]],
 };
 
+export const MIN_NUM_PLAYERS = 5;
+export const MAX_NUM_PLAYERS = 10;
 export const DEFAULT_NUM_PLAYERS = 5;
 export const DEFAULT_NUM_EXPEDITIONS: NumExpeditions =
   possibleNumExpeditions[DEFAULT_NUM_PLAYERS][0];

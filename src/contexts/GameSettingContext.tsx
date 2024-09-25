@@ -1,6 +1,6 @@
 import React, { createContext } from "react";
 
-import { OptionalCharacterType } from "@/constants/characters";
+import { OptionalCitizenType, OptionalDevilType } from "@/constants/characters";
 import {
   DEFAULT_NUM_EXPEDITIONS,
   DEFAULT_NUM_PLAYERS,
@@ -11,8 +11,8 @@ import { useMultiplayerState } from "@/hooks/useMultiplayerState";
 export type GameSetting = {
   numPlayers: number;
   numExpeditions: NumExpeditions;
-  selectedOptionalCitizens: OptionalCharacterType[];
-  selectedOptionalDevils: OptionalCharacterType[];
+  selectedOptionalCitizens: OptionalCitizenType[];
+  selectedOptionalDevils: OptionalDevilType[];
   anonymousVote: boolean;
 };
 

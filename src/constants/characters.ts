@@ -1,3 +1,12 @@
+import AssassinImage from "@/assets/assassin.png";
+import CitizenImage from "@/assets/citizen.png";
+import EvilImage from "@/assets/evil.png";
+import MerlinImage from "@/assets/merlin.png";
+import MordredImage from "@/assets/mordred.png";
+import MorganaImage from "@/assets/morgana.png";
+import OberonImage from "@/assets/oberon.png";
+import PercivalImage from "@/assets/percival.png";
+
 export type CharacterType = DefaultCharacterType | SpecialCharacterType;
 
 export const defaultCharacterTypes = ["Citizen", "Evil"] as const;
@@ -9,7 +18,7 @@ export const optionalDevilTypes = ["Morgana", "Oberon", "Mordred"] as const;
 export const optionalCharacterTypes = [
   ...optionalCitizenTypes,
   ...optionalDevilTypes,
-];
+] as const;
 
 export const specialCharacterTypes = [
   "Merlin",
@@ -166,4 +175,15 @@ export const characterMap: Record<CharacterType, Character> = {
     side: "Evil",
     knownCharacters: [],
   },
+};
+
+export const characterImageMap: Record<CharacterType, string> = {
+  Assassin: AssassinImage,
+  Citizen: CitizenImage,
+  Evil: EvilImage,
+  Merlin: MerlinImage,
+  Mordred: MordredImage,
+  Morgana: MorganaImage,
+  Oberon: OberonImage,
+  Percival: PercivalImage,
 };

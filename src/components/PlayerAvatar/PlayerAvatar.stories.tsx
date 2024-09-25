@@ -24,7 +24,17 @@ const meta = {
     },
     character: {
       control: "select",
-      options: [null, "Merlin", "Percival"],
+      options: [
+        null,
+        "Merlin",
+        "Percival",
+        "Morgana",
+        "Mordred",
+        "Assassin",
+        "Citizen",
+        "Evil",
+        "Oberon",
+      ],
     },
     isCommander: {
       control: "boolean",

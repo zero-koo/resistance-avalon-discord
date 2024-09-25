@@ -4,12 +4,17 @@ import { GiCrossedSwords } from "react-icons/gi";
 import { GrFlagFill } from "react-icons/gr";
 import { RiVipCrownFill } from "react-icons/ri";
 
-import { CharacterSide, CharacterType } from "@/constants/characters";
+import {
+  characterImageMap,
+  characterMap,
+  CharacterSide,
+  CharacterType,
+} from "@/constants/characters";
 import { cn } from "@/lib/utils";
 
 type PlayerAvatarProps = {
   playerName?: string;
-  avater?: string;
+  avatar?: string;
   isSpeaking?: boolean;
   side?: CharacterSide;
   character?: CharacterType;
@@ -24,11 +29,10 @@ type PlayerAvatarProps = {
 
 const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
   playerName,
-  avater,
+  avatar,
   isSpeaking,
   side,
   character,
-  showCharacter,
   isCommander,
   isExpedition,
   selectable,
@@ -36,37 +40,54 @@ const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
   isSelected,
   onToggleSelect,
 }) => {
+  const characterSide =
+    side ?? (character ? characterMap[character].side : null);
   return (
     <div
-      className={cn("relative size-20 rounded-full bg-white", {
-        "centric-shadow shadow-gray-400": isSpeaking,
-        "shadow-blue-600": side === "Citizen",
-        "shadow-red-600": side === "Evil",
-      })}
+      className={cn(
+        "pointer-events-none relative size-20 rounded-full bg-white outline outline-offset-2 outline-gray-500",
+        {
+          "hover:outline-white": selectable,
+          "centric-shadow shadow-gray-400": isSpeaking,
+          "shadow-blue-600": characterSide === "Citizen",
+          "shadow-red-600": characterSide === "Evil",
+          "outline-white": isSelected,
+          "outline-red-600": isAssassinationTarget,
+        }
+      )}
     >
-      <label className="flex size-full items-center justify-center rounded-full">
+      <label className="pointer-events-auto flex size-full items-center justify-center rounded-full">
         <input
           type="checkbox"
           className="appearance-none"
           disabled={!selectable}
-          checked={isSelected || isAssassinationTarget}
-          onChange={(e) => onToggleSelect?.(e.target.checked)}
+          checked={(isSelected || isAssassinationTarget) ?? false}
+          onChange={(e) => {
+            console.log("change", e.target.checked);
+            onToggleSelect?.(e.target.checked);
+          }}
         />
         <img
-          src={discordAvaterImage}
-          className="size-full rounded-full grayscale-[80%]"
-        />
-      </label>
-      <div className="convex absolute inset-0 rounded-full" />
-      <div
-        className={cn(
-          "inner-shadow absolute inset-0 rounded-full shadow-gray-500",
-          {
-            "shadow-blue-600": side === "Citizen",
-            "shadow-red-600": side === "Evil",
+          src={
+            character
+              ? characterImageMap[character]
+              : avatar ?? discordAvaterImage
           }
-        )}
-      ></div>
+          className={cn("size-full rounded-full", {
+            "grayscale-[80%]": !character,
+          })}
+        />
+        <div className="convex absolute inset-0 rounded-full" />
+        <div
+          className={cn(
+            "inner-shadow absolute inset-0 rounded-full shadow-gray-500",
+            {
+              "shadow-blue-600": characterSide === "Citizen",
+              "shadow-red-600": characterSide === "Evil",
+            }
+          )}
+        ></div>
+      </label>
       {isCommander && (
         <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-slate-900/50 p-1 px-1.5 shadow backdrop-blur-sm">
           <RiVipCrownFill size={18} className="text-white/80" />
@@ -77,8 +98,15 @@ const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
           <GrFlagFill size={20} className="scale-75 text-white/80" />
         </div>
       )}
+      {character && character !== "Citizen" && character !== "Evil" && (
+        <div className="absolute bottom-1 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center text-center text-xs">
+          <div className="overflow-hidden text-ellipsis rounded px-1 font-bold uppercase">
+            {character}
+          </div>
+        </div>
+      )}
       {playerName && (
-        <div className="absolute -bottom-1.5 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center text-center text-xs">
+        <div className="absolute -bottom-4 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center text-center text-xs">
           <div className="min-w-16 max-w-20 overflow-hidden text-ellipsis rounded bg-slate-900/50 px-1 py-0.5 backdrop-blur-sm">
             {playerName}
           </div>

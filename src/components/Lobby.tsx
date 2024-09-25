@@ -1,6 +1,6 @@
-import { useGameState } from "@/contexts/GameStateContext";
 import { useIsHost } from "playroomkit";
 
+import { useGameState } from "@/contexts/GameStateContext";
 import { useGameSetting } from "@/hooks/useGameSetting";
 import { useParticipants } from "@/hooks/useParticipants";
 import { usePlayers } from "@/hooks/usePlayers";
