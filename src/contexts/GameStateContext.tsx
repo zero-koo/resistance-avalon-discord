@@ -26,37 +26,26 @@ export type GameState = {
   result: GameResult | null;
 };
 
-const gameResultMap = {
-  success: {
-    winSide: "Citizen",
-  },
-  merlinAssassinated: {
-    winSide: "Evil",
-  },
-  questFailed: {
-    winSide: "Evil",
-  },
-  voteFailed: {
-    winSide: "Evil",
-  },
-} satisfies Record<
-  string,
-  {
-    winSide: CharacterSide;
-  }
->;
+export const gameResults = [
+  "success",
+  "assassinationFailure",
+  "questFailure",
+  "voteFailure",
+] as const;
 
-type GameResult = keyof typeof gameResultMap;
+export type GameResult = (typeof gameResults)[number];
 
-type GamePhase =
-  | "compose-expeditions"
-  | "vote-expeditions"
-  | "expedition"
-  | "expedition-result"
-  | "assassination"
-  | "completed";
+export const gamePhases = [
+  "compose-expeditions",
+  "vote-expeditions",
+  "expedition",
+  "assassination",
+  "completed",
+] as const;
 
-type PlayerState = {
+export type GamePhase = (typeof gamePhases)[number];
+
+export type PlayerState = {
   id: string;
   order: number;
   characterType: CharacterType;
@@ -197,7 +186,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
     }
 
     if (countCompositionTrial >= 5) {
-      setResult("voteFailed");
+      setResult("voteFailure");
       setPhase("completed");
       return;
     }
@@ -259,7 +248,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
 
     // 현재까지의 성공횟수와 남아있는 라운드수의 합이 3 미만이면 시민 패배
     if (successCount + (4 - round) < 3) {
-      setResult("questFailed");
+      setResult("questFailure");
       setPhase("completed");
       return;
     }
@@ -279,7 +268,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
     if (!assassinateTargetId) return;
     setResult(
       playerState[assassinateTargetId].characterType === "Merlin"
-        ? "merlinAssassinated"
+        ? "assassinationFailure"
         : "success"
     );
     setPhase("completed");

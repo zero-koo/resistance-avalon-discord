@@ -7,8 +7,6 @@ import MorganaImage from "@/assets/morgana.png";
 import OberonImage from "@/assets/oberon.png";
 import PercivalImage from "@/assets/percival.png";
 
-export type CharacterType = DefaultCharacterType | SpecialCharacterType;
-
 export const defaultCharacterTypes = ["Citizen", "Evil"] as const;
 
 export const optionalCitizenTypes = ["Percival"] as const;
@@ -26,6 +24,11 @@ export const specialCharacterTypes = [
   ...optionalCharacterTypes,
 ] as const;
 
+export const characterTypes = [
+  ...defaultCharacterTypes,
+  ...specialCharacterTypes,
+] as const;
+
 export type DefaultCharacterType = (typeof defaultCharacterTypes)[number];
 
 export type OptionalCitizenType = (typeof optionalCitizenTypes)[number];
@@ -35,6 +38,8 @@ export type OptionalDevilType = (typeof optionalDevilTypes)[number];
 export type OptionalCharacterType = (typeof optionalCharacterTypes)[number];
 
 export type SpecialCharacterType = (typeof specialCharacterTypes)[number];
+
+export type CharacterType = (typeof characterTypes)[number];
 
 export const characterSide = ["Citizen", "Evil", "Neutral"] as const;
 

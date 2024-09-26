@@ -63,8 +63,7 @@ const PlayerAvater = ({ id, name }: PlayerAvaterProps) => {
     switch (phase) {
       case "compose-expeditions":
       case "vote-expeditions":
-      case "expedition":
-      case "expedition-result": {
+      case "expedition": {
         return state.isExpedition;
       }
       case "assassination": {
