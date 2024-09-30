@@ -5,6 +5,7 @@ import { useGameSetting } from "@/hooks/useGameSetting";
 import { useParticipants } from "@/hooks/useParticipants";
 import { usePlayers } from "@/hooks/usePlayers";
 
+import GameSettingDialog from "./GameSettingDialog";
 import PlayGround from "./PlayGround";
 
 const Lobby: React.FC = () => {
@@ -27,12 +28,15 @@ const Lobby: React.FC = () => {
         <>
           <button onClick={() => toggleReady()}>준비</button>
           {isHost && (
-            <button
-              disabled={players.length < gameSetting.numPlayers}
-              onClick={handleStartGame}
-            >
-              시작
-            </button>
+            <>
+              <GameSettingDialog />
+              <button
+                disabled={players.length < gameSetting.numPlayers}
+                onClick={handleStartGame}
+              >
+                시작
+              </button>
+            </>
           )}
         </>
       )}

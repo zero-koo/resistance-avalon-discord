@@ -53,7 +53,7 @@ export type Character = {
 
 type KnownCharacter = {
   targetCharacter: CharacterType;
-  side?: CharacterSide;
+  side: CharacterSide;
   name?: CharacterType;
 };
 
@@ -92,10 +92,12 @@ export const characterMap: Record<CharacterType, Character> = {
       {
         targetCharacter: "Merlin",
         name: "Merlin",
+        side: "Citizen",
       },
       {
         targetCharacter: "Morgana",
         name: "Merlin",
+        side: "Citizen",
       },
     ],
   },

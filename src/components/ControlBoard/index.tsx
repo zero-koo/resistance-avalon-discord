@@ -23,15 +23,15 @@ const ControlBoard: React.FC = () => {
   return (
     <ControlBoardComponent
       phase={phase}
-      myCamp={characterMap[myPlayerState.characterType].side}
-      myCharacter={myPlayerState.characterType}
-      isCommander={myPlayerState.order === commanderIndex}
-      isExpedition={myPlayerState.isExpedition}
+      myCamp={characterMap[myPlayerState?.characterType]?.side}
+      myCharacter={myPlayerState?.characterType}
+      isCommander={myPlayerState?.order === commanderIndex}
+      isExpedition={myPlayerState?.isExpedition}
       countCompositionTrial={countCompositionTrial}
       numExpeditions={gameSetting.numExpeditions[round]}
       numSelectedExpeditions={selectedExpeditionIds.length}
-      hasAgreedForQuest={myPlayerState.hasAgreedOnExpedition}
-      hasAgreedForTeamBuild={myPlayerState.hasAgreedForComposition}
+      hasAgreedForQuest={myPlayerState?.hasAgreedOnExpedition}
+      hasAgreedForTeamBuild={myPlayerState?.hasAgreedForComposition}
       assassinationTargetSelected={assassinateTargetId !== null}
       gameResult={result}
       onConfirmForTeamBuild={handleCompleteExpeditionComposition}

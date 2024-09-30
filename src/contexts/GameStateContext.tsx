@@ -49,6 +49,7 @@ export type PlayerState = {
   id: string;
   order: number;
   characterType: CharacterType;
+  isSelected: boolean;
   isExpedition: boolean;
   hasAgreedForComposition: boolean | null;
   hasAgreedOnExpedition: boolean | null;
@@ -330,6 +331,7 @@ function initPlayers({
         id: playerId,
         order: index,
         characterType: characters[index],
+        isSelected: false,
         isExpedition: false,
         hasAgreedForComposition: null,
         hasAgreedOnExpedition: null,

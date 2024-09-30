@@ -12,12 +12,14 @@ import {
 } from "@/constants/characters";
 import { cn } from "@/lib/utils";
 
+import style from "./PlayerAvatar.module.css";
+
 type PlayerAvatarProps = {
   playerName?: string;
   avatar?: string;
   isSpeaking?: boolean;
-  side?: CharacterSide;
-  character?: CharacterType;
+  side: CharacterSide | null;
+  character: CharacterType | null;
   showCharacter?: boolean;
   isCommander?: boolean;
   isExpedition?: boolean;
@@ -45,7 +47,8 @@ const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
   return (
     <div
       className={cn(
-        "pointer-events-none relative size-20 rounded-full bg-white outline outline-offset-2 outline-gray-500",
+        "pointer-events-none relative rounded-full bg-white outline outline-offset-2 outline-gray-500",
+        style.avatar,
         {
           "hover:outline-white": selectable,
           "centric-shadow shadow-gray-400": isSpeaking,
@@ -56,14 +59,20 @@ const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
         }
       )}
     >
-      <label className="pointer-events-auto flex size-full items-center justify-center rounded-full">
+      <label
+        className={cn(
+          "pointer-events-auto flex size-full items-center justify-center rounded-full",
+          {
+            "cursor-pointer": selectable,
+          }
+        )}
+      >
         <input
           type="checkbox"
           className="appearance-none"
           disabled={!selectable}
           checked={(isSelected || isAssassinationTarget) ?? false}
           onChange={(e) => {
-            console.log("change", e.target.checked);
             onToggleSelect?.(e.target.checked);
           }}
         />
@@ -106,7 +115,7 @@ const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
         </div>
       )}
       {playerName && (
-        <div className="absolute -bottom-4 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center text-center text-xs">
+        <div className="absolute -bottom-4 left-1/2 flex -translate-x-1/2 flex-col items-center justify-center whitespace-nowrap text-center text-xs">
           <div className="max-w-20 overflow-hidden text-ellipsis rounded bg-slate-900/50 px-1 py-0.5 backdrop-blur-sm">
             {playerName}
           </div>

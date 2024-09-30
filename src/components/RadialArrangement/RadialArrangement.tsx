@@ -1,14 +1,13 @@
+import { cn } from "@/lib/utils";
+import { useBoundingClientRect } from "@/hooks/useBoundingClientRect";
+
 import style from "./RadialArrangement.module.css";
 
-type RadialArrangementProps = {
+type RadialArrangementProps = React.HTMLAttributes<HTMLDivElement> & {
   /**
    * child nodes to be arranged
    */
   items: React.ReactNode[];
-  /**
-   * container size in pixel
-   */
-  size: number;
   /**
    * rotate angle in degree
    * default: 0
@@ -17,28 +16,31 @@ type RadialArrangementProps = {
 };
 
 const RadialArrangement: React.FC<RadialArrangementProps> = ({
+  className,
   items,
-  size,
   rotateAngle = 0,
 }) => {
+  const [ref, rect] = useBoundingClientRect();
   return (
     <div
-      className={style.container}
-      style={{ "--size": `${size}px` } as React.CSSProperties}
+      ref={ref}
+      className={cn("responsive-square relative size-full", className)}
+      style={{ "--size": `${rect?.width}px` } as React.CSSProperties}
     >
-      {items.map((item, index) => (
-        <div
-          key={index}
-          className={style.outer}
-          style={
-            {
-              "--angle": `${(360 / items.length) * index + rotateAngle}deg`,
-            } as React.CSSProperties
-          }
-        >
-          <div className={style.inner}>{item}</div>
-        </div>
-      ))}
+      {rect &&
+        items.map((item, index) => (
+          <div
+            key={index}
+            className={style.outer}
+            style={
+              {
+                "--angle": `${(360 / items.length) * index + rotateAngle}deg`,
+              } as React.CSSProperties
+            }
+          >
+            <div className={style.inner}>{item}</div>
+          </div>
+        ))}
     </div>
   );
 };

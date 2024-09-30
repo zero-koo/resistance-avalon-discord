@@ -159,7 +159,7 @@ const VoteTeamBuildPhaseBoard: React.FC<{
 }> = ({ isApproved, isLastVote, onVote }) => {
   return (
     <div>
-      <div className="mb-4">
+      <div className="mb-[1em]">
         <div>
           <CommanderText />
           <span>{"이 "}</span>
@@ -187,7 +187,7 @@ const ExpeditionPhaseBoard: React.FC<{
     <div>
       {isExpedition ? (
         <div>
-          <div className="mb-4 space-y-2">
+          <div className="mb-[1em] space-y-2">
             <div>
               <span>{"당신은 이번 임무에 참여하는 "}</span>
               <TeamMemberText />
@@ -298,4 +298,10 @@ const CompletedPhaseBoard: React.FC<{
   );
 };
 
-export default ControlBoard;
+export default function (props: ControlBoardProps) {
+  return (
+    <div className="responsive-text">
+      <ControlBoard {...props} />
+    </div>
+  );
+}

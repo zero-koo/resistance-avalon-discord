@@ -23,15 +23,8 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     items: Array.from({ length: 10 }, () => (
-      <PlayerAvatar
-        playerName="홍길동"
-        isSpeaking
-        isExpedition
-        isCommander
-        isAssassinationTarget
-      />
+      <PlayerAvatar playerName="홍길동" character={null} side={null} />
     )),
-    size: 400,
     rotateAngle: 30,
   },
 };

@@ -40,6 +40,13 @@
   body {
     @apply bg-background text-foreground;
   }
+  .responsive-square {
+    width: clamp(22rem, 100vw, 37.5rem);
+    height: clamp(22rem, 100vw, 37.5rem);
+  }
+  .responsive-text {
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
+  }
 }
 @layer components {
   .convex {
