@@ -41,8 +41,8 @@
     @apply bg-background text-foreground;
   }
   .responsive-square {
-    width: clamp(22rem, 100vw, 37.5rem);
-    height: clamp(22rem, 100vw, 37.5rem);
+    width: clamp(22rem, 100vw, 32rem);
+    height: clamp(22rem, 100vw, 32rem);
   }
   .responsive-text {
     font-size: clamp(0.8rem, 2.5vw, 1rem);

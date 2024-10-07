@@ -3,10 +3,8 @@
 
   transform: translateY(-50%) rotate(var(--angle));
   transform-origin: calc(var(--size) / 2);
-  transition: transform 1s ease-out;
 }
 
 .inner {
   transform: rotate(calc(-1 * var(--angle)));
-  transition: transform 1s ease-out;
 }

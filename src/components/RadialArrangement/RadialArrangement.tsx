@@ -24,7 +24,7 @@ const RadialArrangement: React.FC<RadialArrangementProps> = ({
   return (
     <div
       ref={ref}
-      className={cn("responsive-square relative size-full", className)}
+      className={cn("responsive-square relative", className)}
       style={{ "--size": `${rect?.width}px` } as React.CSSProperties}
     >
       {rect &&

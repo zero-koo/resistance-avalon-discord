@@ -111,7 +111,7 @@ const TeamBuildPhaseBoard: React.FC<{
   onConfirmForTeamBuild,
 }) => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="-mb-5 flex flex-col items-center">
       {isCommander ? (
         <div>
           <p>
@@ -158,7 +158,7 @@ const VoteTeamBuildPhaseBoard: React.FC<{
   onVote: (isApproved: boolean | null) => void;
 }> = ({ isApproved, isLastVote, onVote }) => {
   return (
-    <div>
+    <div className="-mb-5">
       <div className="mb-[1em]">
         <div>
           <CommanderText />
@@ -184,7 +184,7 @@ const ExpeditionPhaseBoard: React.FC<{
   onVote: (isApproved: boolean | null) => void;
 }> = ({ isExpedition, isGoodCamp, isApproved, onVote }) => {
   return (
-    <div>
+    <div className="-mb-5">
       {isExpedition ? (
         <div>
           <div className="mb-[1em] space-y-2">

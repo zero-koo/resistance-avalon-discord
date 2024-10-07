@@ -1,11 +1,7 @@
 import { createContext, useContext, useMemo } from "react";
 
-import {
-  CharacterSide,
-  CharacterType,
-  OptionalCharacterType,
-} from "@/constants/characters";
-import { numDevilsPerPlayers } from "@/constants/settings";
+import { CharacterType, OptionalCharacterType } from "@/constants/characters";
+import { characterListFromSetting, shuffle } from "@/lib/game";
 import { useGameSetting } from "@/hooks/useGameSetting";
 import { useMultiplayerState } from "@/hooks/useMultiplayerState";
 import { useParticipants } from "@/hooks/useParticipants";
@@ -237,6 +233,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
       isSuccess,
     ];
     setExpeditionResultPerRound([...expeditionResultPerRound, isSuccess]);
+    setExpeditionIds([]);
 
     const successCount = updatedExpeditionResultPerRound.filter(
       (flag) => flag === true
@@ -344,43 +341,10 @@ function initPlayers({
   return players;
 }
 
-function initCharacterTypes({
-  numPlayers,
-  optionalCitizens,
-  optionalDevils,
-}: {
+function initCharacterTypes(params: {
   numPlayers: number;
   optionalCitizens: OptionalCharacterType[];
   optionalDevils: OptionalCharacterType[];
 }): CharacterType[] {
-  const numDevils = numDevilsPerPlayers[numPlayers];
-  const numCitizens = numPlayers - numDevils;
-
-  // the number '1' indicates default special characters, "Merlin" and "Assassin" on each side
-  const citizens: CharacterType[] = [
-    "Merlin",
-    ...shuffle(optionalCitizens).slice(numCitizens - 1),
-    ...Array(numCitizens)
-      .fill("Citizen")
-      .splice(optionalCitizens.length + 1),
-  ];
-
-  // Shuffle devils before assiging in order to pick randomly
-  // in case the number of optional devils is larger than acceptable
-  const devils: CharacterType[] = [
-    "Assassin",
-    ...shuffle(optionalDevils).slice(numDevils - 1),
-    ...Array(numDevils)
-      .fill("Evil")
-      .splice(optionalDevils.length + 1),
-  ];
-
-  return shuffle([...citizens, ...devils]);
-}
-
-function shuffle<T>(items: T[]): T[] {
-  return items
-    .map((item) => ({ item, value: Math.random() }))
-    .sort(({ value: prev }, { value: curr }) => (prev < curr ? -1 : 1))
-    .map(({ item }) => item);
+  return shuffle(characterListFromSetting(params));
 }

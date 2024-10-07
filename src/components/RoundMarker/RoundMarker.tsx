@@ -16,11 +16,13 @@ export type RoundMarkerProps = {
    * Is this the current round?
    */
   isCurrent?: boolean;
+  countCompositionTrial: number;
 };
 
 const RoundMarker: React.FC<RoundMarkerProps> = ({
   round,
   numExpeditions,
+  countCompositionTrial,
   questSuccess,
   isCurrent,
 }) => {
@@ -40,7 +42,7 @@ const RoundMarker: React.FC<RoundMarkerProps> = ({
             "diffused text-yellow-200 opacity-100": isCurrent,
           }
         )}
-      >{`${round + 1}`}</div>
+      >{`${round + 1}${isCurrent ? ` - ${countCompositionTrial}` : ""}`}</div>
       {questSuccess !== null &&
         (questSuccess ? <SuccessMarker /> : <FailMarker />)}
     </div>

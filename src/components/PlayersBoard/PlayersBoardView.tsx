@@ -14,7 +14,7 @@ type PlayersBoardProps = {
   myIndex: number;
   players: Player[];
   teamMemberIds: string[];
-  commanderIndex: number;
+  commanderIndex: number | null;
   assassinationTargetId: string | null;
   onSelectPlayer: (playerId: string, selected: boolean) => void;
 };

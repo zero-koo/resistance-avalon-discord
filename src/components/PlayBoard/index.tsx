@@ -6,7 +6,9 @@ const PlayBoard = () => {
     <div className="responsive-square relative flex items-center justify-center">
       <PlayersBoard />
       <div
-        className={"absolute inset-1/4 flex items-center justify-center pt-5"}
+        className={
+          "absolute inset-1/4 flex items-center justify-center px-3 py-5"
+        }
       >
         <ControlBoard />
       </div>

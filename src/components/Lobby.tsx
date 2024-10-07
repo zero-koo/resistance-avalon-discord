@@ -5,8 +5,10 @@ import { useGameSetting } from "@/hooks/useGameSetting";
 import { useParticipants } from "@/hooks/useParticipants";
 import { usePlayers } from "@/hooks/usePlayers";
 
+import CharacterSettingBoard from "./CharacterSettingBoard";
 import GameSettingDialog from "./GameSettingDialog";
 import PlayGround from "./PlayGround";
+import RoundBoard from "./RoundBoard";
 
 const Lobby: React.FC = () => {
   const isHost = useIsHost();
@@ -27,6 +29,10 @@ const Lobby: React.FC = () => {
       {!isStarted && (
         <>
           <button onClick={() => toggleReady()}>준비</button>
+          <div className="flex flex-col items-center gap-10">
+            <RoundBoard />
+            <CharacterSettingBoard />
+          </div>
           {isHost && (
             <>
               <GameSettingDialog />
