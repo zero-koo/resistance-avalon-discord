@@ -15,9 +15,10 @@ const RoundBoard: React.FC<RoundBoardProps> = ({
   countCompositionTrial,
 }) => {
   return (
-    <div className="flex gap-2.5">
+    <div className="flex gap-2.5 p-2 pt-6">
       {rounds.map(({ numExpeditions, questSuccess }, round) => (
         <RoundMarker
+          key={round}
           round={round}
           countCompositionTrial={countCompositionTrial}
           numExpeditions={numExpeditions}

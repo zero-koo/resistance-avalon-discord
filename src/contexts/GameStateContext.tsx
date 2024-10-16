@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import { CharacterType, OptionalCharacterType } from "@/constants/characters";
 import { characterListFromSetting, shuffle } from "@/lib/game";
@@ -46,7 +46,6 @@ export type PlayerState = {
   order: number;
   characterType: CharacterType;
   isSelected: boolean;
-  isExpedition: boolean;
   hasAgreedForComposition: boolean | null;
   hasAgreedOnExpedition: boolean | null;
 };
@@ -62,6 +61,7 @@ export type GameStateContext = GameState & {
   handleVoteOnExpedition(isAgree: boolean | null): void;
   handleChangeAssassinateTarget(playerId: string): void;
   handleConfirmAssassinate(): void;
+  handleRestartGame(): void;
 };
 
 const GameStateContext = createContext<GameStateContext | null>(null);
@@ -71,7 +71,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
 }) => {
   const { gameSetting } = useGameSetting();
   const { me } = useParticipants();
-  const { playerIds } = usePlayers();
+  const { playerIds, resetPlayers } = usePlayers();
   const [isStarted, setIsStarted] = useMultiplayerState<boolean>(
     "is-started",
     false
@@ -93,11 +93,9 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
   );
   const [countCompositionTrial, setCountCompositionTrial] =
     useMultiplayerState<number>("count-composition-trial", 1);
-  const selectedExpeditionIds = useMemo<string[]>(() => {
-    return Object.values(playerState)
-      .filter((player) => player.isExpedition)
-      .map((player) => player.id);
-  }, [playerState]);
+  const [selectedExpeditionIds, setSelectedExpeditionIds] = useMultiplayerState<
+    string[]
+  >("selected-expedition-ids", []);
   const [expeditionIds, setExpeditionIds] = useMultiplayerState<string[]>(
     "expedition-ids",
     []
@@ -137,19 +135,18 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
     playerId: string,
     isSelected: boolean
   ) => {
-    setPlayerState({
-      ...playerState,
-      [playerId]: {
-        ...playerState[playerId],
-        isExpedition: isSelected,
-      },
-    });
+    setSelectedExpeditionIds(
+      isSelected
+        ? [...selectedExpeditionIds, playerId]
+        : selectedExpeditionIds.filter((id) => id !== playerId)
+    );
   };
 
   const handleCompleteExpeditionComposition = () => {
     if (selectedExpeditionIds.length < gameSetting.numExpeditions[round])
       return;
     setExpeditionIds(selectedExpeditionIds);
+    setSelectedExpeditionIds([]);
     setPhase("vote-expeditions");
   };
 
@@ -272,6 +269,15 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
     setPhase("completed");
   };
 
+  const handleRestartGame = () => {
+    setIsStarted(false);
+    setPhase("compose-expeditions");
+    setCountCompositionTrial(1);
+    setExpeditionResultPerRound([]);
+    setAssassinateTargetId(null);
+    resetPlayers();
+  };
+
   return (
     <GameStateContext.Provider
       value={{
@@ -294,6 +300,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
         handleVoteOnExpedition,
         handleChangeAssassinateTarget,
         handleConfirmAssassinate,
+        handleRestartGame,
       }}
     >
       {children}
@@ -329,7 +336,6 @@ function initPlayers({
         order: index,
         characterType: characters[index],
         isSelected: false,
-        isExpedition: false,
         hasAgreedForComposition: null,
         hasAgreedOnExpedition: null,
       };

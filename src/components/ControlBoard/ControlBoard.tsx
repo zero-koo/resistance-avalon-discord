@@ -9,6 +9,7 @@ import CommanderText from "../texts/CommanderText";
 import MerlinText from "../texts/MerlinText";
 import TeamMemberText from "../texts/TeamMemberText";
 import TeamText from "../texts/TeamText";
+import { Button } from "../ui/Button";
 import Vote from "../Vote";
 
 type ControlBoardProps = {
@@ -28,6 +29,7 @@ type ControlBoardProps = {
   onVoteForTeamBuild: (isAgreed: boolean | null) => void;
   onVoteForQuest: (isAgreed: boolean | null) => void;
   onConfirmForAssassination: () => void;
+  onRestartGame: () => void;
 };
 
 const ControlBoard: React.FC<ControlBoardProps> = ({
@@ -47,6 +49,7 @@ const ControlBoard: React.FC<ControlBoardProps> = ({
   onVoteForTeamBuild,
   onVoteForQuest,
   onConfirmForAssassination,
+  onRestartGame,
 }) => {
   switch (phase) {
     case "compose-expeditions": {
@@ -91,7 +94,13 @@ const ControlBoard: React.FC<ControlBoardProps> = ({
       if (!gameResult) {
         return null;
       }
-      return <CompletedPhaseBoard myCamp={myCamp} result={gameResult} />;
+      return (
+        <CompletedPhaseBoard
+          myCamp={myCamp}
+          result={gameResult}
+          onRestartGame={onRestartGame}
+        />
+      );
     }
     default: {
       return null;
@@ -167,7 +176,7 @@ const VoteTeamBuildPhaseBoard: React.FC<{
           <span>{"을 선정하였습니다. 찬반 투표를 진행해주세요."}</span>
         </div>
         {isLastVote && (
-          <div>
+          <div className="mt-2 text-xs text-orange-400">
             라운드의 마지막 투표입니다. 부결되면 악한 팀이 즉시 승리합니다.
           </div>
         )}
@@ -281,7 +290,8 @@ export const gameResultMap = {
 const CompletedPhaseBoard: React.FC<{
   myCamp: CharacterSide;
   result: GameResult;
-}> = ({ myCamp, result }) => {
+  onRestartGame: () => void;
+}> = ({ myCamp, result, onRestartGame }) => {
   const isWin = gameResultMap[result].winSide === myCamp;
   return (
     <div>
@@ -294,6 +304,11 @@ const CompletedPhaseBoard: React.FC<{
         {isWin ? "승리" : "패배"}
       </div>
       <div>{gameResultMap[result].message}</div>
+      <div className="-mb-5 mt-5 flex w-full justify-center">
+        <Button variant={"outline"} onClick={onRestartGame}>
+          돌아가기
+        </Button>
+      </div>
     </div>
   );
 };

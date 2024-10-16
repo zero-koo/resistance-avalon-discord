@@ -11,6 +11,7 @@ const ControlBoard: React.FC = () => {
     round,
     phase,
     selectedExpeditionIds,
+    expeditionIds,
     assassinateTargetId,
     commanderIndex,
     countCompositionTrial,
@@ -19,6 +20,7 @@ const ControlBoard: React.FC = () => {
     handleVoteOnExpedition,
     handleConfirmAssassinate,
     handleCompleteExpeditionComposition,
+    handleRestartGame,
   } = useGameState();
   return (
     <ControlBoardComponent
@@ -26,7 +28,7 @@ const ControlBoard: React.FC = () => {
       myCamp={characterMap[myPlayerState?.characterType]?.side}
       myCharacter={myPlayerState?.characterType}
       isCommander={myPlayerState?.order === commanderIndex}
-      isExpedition={myPlayerState?.isExpedition}
+      isExpedition={expeditionIds.includes(myPlayerState?.id)}
       countCompositionTrial={countCompositionTrial}
       numExpeditions={gameSetting.numExpeditions[round]}
       numSelectedExpeditions={selectedExpeditionIds.length}
@@ -38,6 +40,7 @@ const ControlBoard: React.FC = () => {
       onVoteForTeamBuild={handleVoteForExpeditionComposition}
       onVoteForQuest={handleVoteOnExpedition}
       onConfirmForAssassination={handleConfirmAssassinate}
+      onRestartGame={handleRestartGame}
     />
   );
 };

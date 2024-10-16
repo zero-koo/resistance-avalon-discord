@@ -11,7 +11,7 @@ import RadialArrangement from "../RadialArrangement";
 type PlayersBoardProps = {
   phase: GamePhase;
   myCharacter: CharacterType | null;
-  myIndex: number;
+  myIndex: number | null;
   players: Player[];
   teamMemberIds: string[];
   commanderIndex: number | null;

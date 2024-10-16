@@ -31,8 +31,12 @@ const GameSettingDialog: React.FC<GameSettingDialogProps> = ({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger>
-        <Button size="icon" onClick={() => setIsDialogOpen(true)}>
-          <FiSettings size={24} />
+        <Button
+          variant={"outline"}
+          className="w-20"
+          onClick={() => setIsDialogOpen(true)}
+        >
+          설정
         </Button>
       </DialogTrigger>
       <DialogContent>

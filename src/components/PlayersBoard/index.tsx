@@ -38,7 +38,7 @@ const PlayersBoard: React.FC = () => {
           ? playerState[player.id].characterType
           : null, // TODO
       camp:
-        characterMap[myCharacter].knownCharacters.find(
+        characterMap[myCharacter]?.knownCharacters.find(
           (character) =>
             playerState[player.id].characterType === character.targetCharacter
         )?.side ?? null,
@@ -55,8 +55,8 @@ const PlayersBoard: React.FC = () => {
   return (
     <PlayersBoardView
       players={players}
-      myCharacter={myCharacter}
-      myIndex={myIndex}
+      myCharacter={myCharacter ?? null}
+      myIndex={myIndex ?? null}
       phase={phase}
       commanderIndex={commanderIndex}
       assassinationTargetId={assassinateTargetId}

@@ -26,6 +26,7 @@ type PlayerAvatarProps = {
   selectable?: boolean;
   isSelected?: boolean;
   isAssassinationTarget?: boolean;
+  size?: "default" | "sm";
   onToggleSelect?: (selected: boolean) => void;
 };
 
@@ -40,18 +41,19 @@ const PlayerAvatar: React.FC<PlayerAvatarProps> = ({
   selectable,
   isAssassinationTarget,
   isSelected,
+  size = "default",
   onToggleSelect,
 }) => {
-  const characterSide =
-    side ?? (character ? characterMap[character].side : null);
+  const characterSide = character ? characterMap[character].side : side ?? null;
   return (
     <div
       className={cn(
         "pointer-events-none relative rounded-full bg-white outline outline-offset-2 outline-gray-500",
         style.avatar,
         {
+          [style.small]: size === "sm",
           "hover:outline-white": selectable,
-          "centric-shadow shadow-gray-400": isSpeaking,
+          "centric-shadow shadow-white": isSpeaking,
           "shadow-blue-600": characterSide === "Citizen",
           "shadow-red-600": characterSide === "Evil",
           "outline-white": isSelected,
