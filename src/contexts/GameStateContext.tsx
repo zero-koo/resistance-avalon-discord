@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect } from "react";
 
 import { CharacterType, OptionalCharacterType } from "@/constants/characters";
+import { GameLog } from "@/constants/logs";
 import { characterListFromSetting, shuffle } from "@/lib/game";
 import { useGameSetting } from "@/hooks/useGameSetting";
 import { useMultiplayerState } from "@/hooks/useMultiplayerState";
@@ -20,6 +21,7 @@ export type GameState = {
   expeditionResultPerRound: Array<boolean | null>;
   assassinateTargetId: string | null;
   result: GameResult | null;
+  gameLogs: GameLog[];
 };
 
 export const gameResults = [
@@ -84,6 +86,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
   const [playerState, setPlayerState] = useMultiplayerState<
     Record<string, PlayerState>
   >("player-state", {});
+  const myPlayerState = playerState[me?.id ?? ""]; // TODO!
   const [defaultPlayerState, setDefaultPlayerState] = useMultiplayerState<
     Record<string, PlayerState>
   >("default-player-state", {});
@@ -111,6 +114,14 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
     null
   );
 
+  const [gameLogs, setGameLogs] = useMultiplayerState<GameLog[]>(
+    "game-logs",
+    []
+  );
+  const addGameLog = (...log: GameLog[]) => {
+    setGameLogs([...gameLogs, ...log]);
+  };
+
   const handleStartGame = () => {
     if (playerIds.length < gameSetting.numPlayers) {
       throw Error("Not enough ready players!");
@@ -129,6 +140,16 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
     setPlayerState(players);
     setDefaultPlayerState(players);
     setIsStarted(true);
+
+    addGameLog(
+      {
+        type: "default",
+        text: "게임이 시작되었습니다.",
+      },
+      {
+        type: "character",
+      }
+    );
   };
 
   const handleChangeExpeditionComposition = (
@@ -147,6 +168,14 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
       return;
     setExpeditionIds(selectedExpeditionIds);
     setSelectedExpeditionIds([]);
+
+    addGameLog({
+      type: "team-build",
+      round,
+      subRound: countCompositionTrial,
+      commanderIndex,
+      teamMemberIds: selectedExpeditionIds,
+    });
     setPhase("vote-expeditions");
   };
 
@@ -174,6 +203,12 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
       (player) => player.hasAgreedForComposition === false
     );
 
+    addGameLog({
+      type: "team-vote",
+      countAgree: agreeingPlayers.length,
+      countDisagree: disagreeingPlayers.length,
+    });
+
     if (agreeingPlayers.length > disagreeingPlayers.length) {
       setPhase("expedition");
       return;
@@ -187,6 +222,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
 
     setCountCompositionTrial(countCompositionTrial + 1);
     setCommanderIndex((commanderIndex + 1) % gameSetting.numPlayers);
+    setExpeditionIds([]);
     setPlayerState({
       ...defaultPlayerState,
     });
@@ -232,6 +268,13 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
     setExpeditionResultPerRound([...expeditionResultPerRound, isSuccess]);
     setExpeditionIds([]);
 
+    addGameLog({
+      type: "mission",
+      countAgree: votedExpeditions.length - disagreeCount,
+      countDisagree: disagreeCount,
+      isSuccess,
+    });
+
     const successCount = updatedExpeditionResultPerRound.filter(
       (flag) => flag === true
     ).length;
@@ -261,21 +304,27 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
 
   const handleConfirmAssassinate = () => {
     if (!assassinateTargetId) return;
-    setResult(
-      playerState[assassinateTargetId].characterType === "Merlin"
-        ? "assassinationFailure"
-        : "success"
-    );
+    const isSuccess =
+      playerState[assassinateTargetId].characterType === "Merlin";
+    setResult(isSuccess ? "assassinationFailure" : "success");
+
     setPhase("completed");
+    addGameLog({
+      type: "default",
+      text: `암살자가 멀린 암살에 ${isSuccess ? "성공" : "실패"}하였습니다.`,
+    });
   };
 
   const handleRestartGame = () => {
     setIsStarted(false);
+    setRound(0);
     setPhase("compose-expeditions");
     setCountCompositionTrial(1);
     setExpeditionResultPerRound([]);
     setAssassinateTargetId(null);
     resetPlayers();
+    setResult(null);
+    setGameLogs([]);
   };
 
   return (
@@ -285,7 +334,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
         phase,
         round,
         playerState,
-        myPlayerState: playerState[me?.id ?? ""], // TODO!
+        myPlayerState,
         commanderIndex,
         countCompositionTrial,
         selectedExpeditionIds,
@@ -293,6 +342,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
         expeditionResultPerRound,
         assassinateTargetId,
         result,
+        gameLogs,
         handleStartGame,
         handleChangeExpeditionComposition,
         handleCompleteExpeditionComposition,

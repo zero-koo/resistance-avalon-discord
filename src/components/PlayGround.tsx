@@ -1,3 +1,4 @@
+import GameLogs from "./GameLogs";
 import PlayBoard from "./PlayBoard";
 import RoundBoard from "./RoundBoard";
 
@@ -8,6 +9,9 @@ const PlayGround: React.FC = () => {
         <RoundBoard />
       </div>
       <PlayBoard />
+      <div className="fixed bottom-0 left-0 right-0 flex justify-center">
+        <GameLogs />
+      </div>
     </div>
   );
 };

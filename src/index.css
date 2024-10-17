@@ -45,8 +45,11 @@
   body {
     @apply bg-background text-foreground;
   }
-  .responsive-square {
+  .responsive-width {
     width: clamp(22rem, 100vw, 34rem);
+  }
+  .responsive-square {
+    @apply responsive-width;
     height: clamp(22rem, 100vw, 34rem);
   }
   .responsive-text {
