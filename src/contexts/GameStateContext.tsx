@@ -260,7 +260,7 @@ export const GameStateProvider: React.FC<React.PropsWithChildren> = ({
 
     const isSuccess =
       disagreeCount === 0 ||
-      (round === 4 && gameSetting.numPlayers >= 7 && disagreeCount === 1);
+      (round === 3 && gameSetting.numPlayers >= 7 && disagreeCount === 1);
     const updatedExpeditionResultPerRound = [
       ...expeditionResultPerRound,
       isSuccess,
