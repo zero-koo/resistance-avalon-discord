@@ -1,4 +1,5 @@
 import { useGameState } from "@/contexts/GameStateContext";
+import { useHandleDisconnection } from "@/hooks/useHandleDisconnection";
 
 import CharacterSettingBoard from "./CharacterSettingBoard";
 import ParticipantList from "./ParticipantList";
@@ -8,6 +9,8 @@ import RoundBoard from "./RoundBoard";
 
 const Lobby: React.FC = () => {
   const { isStarted } = useGameState();
+
+  useHandleDisconnection();
 
   return (
     <div className="h-full">

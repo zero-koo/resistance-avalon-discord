@@ -1,4 +1,4 @@
-import { createContext, useEffect } from "react";
+import { createContext } from "react";
 
 import { useGameSetting } from "@/hooks/useGameSetting";
 import { useMultiplayerState } from "@/hooks/useMultiplayerState";
@@ -10,6 +10,7 @@ type PlayersContext = {
   playerIds: string[];
   players: Player[];
   toggleReady(isReady?: boolean): void;
+  setPlayers(players: Player[]): void;
   resetPlayers(): void;
 };
 
@@ -23,7 +24,7 @@ export const PlayersProvider: React.FC<React.PropsWithChildren> = ({
   const {
     gameSetting: { numPlayers },
   } = useGameSetting();
-  const { me, participants } = useParticipants();
+  const { me } = useParticipants();
   const [players, setPlayers] = useMultiplayerState<Player[]>("players", []);
 
   const toggleReady = (isReady?: boolean) => {
@@ -45,19 +46,6 @@ export const PlayersProvider: React.FC<React.PropsWithChildren> = ({
 
   const playerIds = players.map((player) => player.id);
 
-  // TODO: Temporary measurement
-  useEffect(() => {
-    if (!participants.length) return;
-    setPlayers(
-      players.filter((player) =>
-        participants.some((participant) => {
-          console.log(participant.id, player.id);
-          return participant.id === player.id;
-        })
-      )
-    );
-  }, [participants]);
-
   const resetPlayers = () => {
     setPlayers([]);
   };
@@ -68,6 +56,7 @@ export const PlayersProvider: React.FC<React.PropsWithChildren> = ({
         playerIds,
         players,
         toggleReady,
+        setPlayers,
         resetPlayers,
       }}
     >
